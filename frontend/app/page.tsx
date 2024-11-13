@@ -1,9 +1,5 @@
-// import Image from "next/image";
-
-
+import WorkStat from "./components/WorkStat";
 
 export default function Home() {
-  return (
-    <div></div>
-  );
+  return <WorkStat />;
 }
