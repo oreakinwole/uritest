@@ -15,6 +15,14 @@ interface Application {
   dateApplied: string;
 }
 
+interface Stats {
+  totalApplicants: number;
+  countByStatus: {
+    statusName: "pending" | "accepted" | "rejected";
+    count: number;
+  }[];
+}
+
 export default function Dashboard() {
   const [filteredSet, setFilteredSet] = useState<undefined | Application[]>(
     undefined
@@ -40,9 +48,32 @@ export default function Dashboard() {
     const getApplications = async () => {
       setIsLoading(true);
       const res = await fetch("http://localhost:3000/applications");
-      const data = await res.json();
+      const dataApplications: Application[] = await res.json();
+      setDataSet(dataApplications);
 
-      setDataSet(data);
+      const resStats = await fetch("http://localhost:3000/applications/stats");
+      const statsData: Stats = await resStats.json();
+
+      const formatData: number[] = [];
+
+      // Set the appropriate status to its position in the array
+      statsData.countByStatus.forEach((val) => {
+        if (val.statusName === "pending") formatData[0] = val.count;
+        if (val.statusName === "rejected") formatData[1] = val.count;
+        if (val.statusName === "accepted") formatData[2] = val.count;
+      });
+
+      console.log(
+        {
+          ...dataStats,
+          datasets: [{ ...dataStats.datasets[0], data: formatData }],
+        }
+      )
+      // update the Data array used by Chart.js
+      setDataStats({
+        ...dataStats,
+        datasets: [{ ...dataStats.datasets[0], data: formatData }],
+      });
       setIsLoading(false);
     };
 
