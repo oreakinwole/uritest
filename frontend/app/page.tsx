@@ -1,5 +1,5 @@
-import WorkStat from "./components/WorkStat";
+import Dashboard from "./components/Dashboard";
 
-export default function Home() {
-  return <WorkStat />;
+export default function Page() {
+  return <Dashboard />;
 }
