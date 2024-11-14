@@ -15,4 +15,21 @@ describe('ApplicationsController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('should have array of objects', () => {
+    expect(controller.findAll()).toEqual(
+      expect.arrayContaining([expect.any(Object)]),
+    );
+  });
+
+  it('array should contain an object with given properties', () => {
+    expect(controller.findAll()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          jobTitle: 'DevOps Engineer',
+          companyName: 'FusionTech',
+        }),
+      ]),
+    );
+  });
 });
