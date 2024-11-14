@@ -109,25 +109,23 @@ export class ApplicationsController {
   }
 
   @Get('/stats')
-  getStats(): Stats[] {
-    return [
-      {
-        totalApplicants: 12,
-        countByStatus: [
-          {
-            statusName: 'pending',
-            count: 8,
-          },
-          {
-            statusName: 'accepted',
-            count: 12,
-          },
-          {
-            statusName: 'rejected',
-            count: 2,
-          },
-        ],
-      },
-    ];
+  getStats(): Stats {
+    return {
+      totalApplicants: 12,
+      countByStatus: [
+        {
+          statusName: 'pending',
+          count: 1,
+        },
+        {
+          statusName: 'accepted',
+          count: 6,
+        },
+        {
+          statusName: 'rejected',
+          count: 5,
+        },
+      ],
+    };
   }
 }
