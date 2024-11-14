@@ -8,6 +8,14 @@ interface Application {
   dateApplied: string;
 }
 
+interface Stats {
+  totalApplicants: number;
+  countByStatus: {
+    statusName: 'pending' | 'accepted' | 'rejected';
+    count: number;
+  }[];
+}
+
 @Controller('applications')
 export class ApplicationsController {
   @Get()
@@ -101,7 +109,25 @@ export class ApplicationsController {
   }
 
   @Get('/stats')
-  getStats(): string {
-    return '';
+  getStats(): Stats[] {
+    return [
+      {
+        totalApplicants: 12,
+        countByStatus: [
+          {
+            statusName: 'pending',
+            count: 8,
+          },
+          {
+            statusName: 'accepted',
+            count: 12,
+          },
+          {
+            statusName: 'rejected',
+            count: 2,
+          },
+        ],
+      },
+    ];
   }
 }
