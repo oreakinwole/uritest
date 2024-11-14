@@ -4,10 +4,11 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
+import Table from "./Table";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface Application {
+export interface Application {
   id: string;
   jobTitle: string;
   companyName: string;
@@ -63,12 +64,10 @@ export default function Dashboard() {
         if (val.statusName === "accepted") formatData[2] = val.count;
       });
 
-      console.log(
-        {
-          ...dataStats,
-          datasets: [{ ...dataStats.datasets[0], data: formatData }],
-        }
-      )
+      console.log({
+        ...dataStats,
+        datasets: [{ ...dataStats.datasets[0], data: formatData }],
+      });
       // update the Data array used by Chart.js
       setDataStats({
         ...dataStats,
@@ -113,65 +112,21 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-28">
-      <header className="mb-10 pl-10 lg:max-w-[400px] flex flex-wrap gap-6 justify-between">
-        <select onChange={(e) => filterBy(e.target.value)}>
-          <option value="">Filter by</option>
-          <option value="pending">Pending</option>
-          <option value="accepted">Accepted</option>
-          <option value="rejected">Rejected</option>
-        </select>
+    <div className="p-28 max-w-[1200px] mx-auto flex flex-wrap-reverse gap-20 justify-center">
+      <Table
+        filterBy={filterBy}
+        toggleDateSort={toggleDateSort}
+        isLoading={isLoading}
+        dataSet={dataSet}
+        filteredSet={filteredSet}
+      />
 
-        <select onChange={(e) => toggleDateSort(e.target.value)}>
-          <option value="">Sort</option>
-          <option value="ascending">Latest</option>
-          <option value="descending">Oldest</option>
-        </select>
-      </header>
 
-      <div className="flex  justify-between">
-        {isLoading && <p className="text-xl">is loading ...</p>}
-        {!isLoading && (
-          <table className="text-center">
-            <thead>
-              <tr>
-                <th>Job Title</th>
-                <th>Company Name</th>
-                <th>Status</th>
-                <th>Date Applied</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {!filteredSet &&
-                dataSet &&
-                dataSet.map((val) => (
-                  <tr key={val.id}>
-                    <td>{val.jobTitle}</td>
-                    <td>{val.companyName}</td>
-                    <td>{val.status}</td>
-                    <td>{val.dateApplied}</td>
-                  </tr>
-                ))}
-
-              {filteredSet &&
-                filteredSet.map((val) => (
-                  <tr key={val.id}>
-                    <td>{val.jobTitle}</td>
-                    <td>{val.companyName}</td>
-                    <td>{val.status}</td>
-                    <td>{val.dateApplied}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        )}
-
-        <aside className="text-center">
+        <aside className="text-center max-w-[600px]">
           <h3>Statistics</h3>
           <Doughnut data={dataStats} />
         </aside>
-      </div>
+
     </div>
   );
 }
